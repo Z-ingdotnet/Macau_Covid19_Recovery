@@ -18,8 +18,7 @@ library(bvartools)
 library(rsample)
 library(mda)
 library(confidence)
-
-require(fUnitRoots)
+library(fUnitRoots)
 
 library(readxl)
 Arrival_stats2 <- read_excel("C:/Arrival stats2.xlsx")
