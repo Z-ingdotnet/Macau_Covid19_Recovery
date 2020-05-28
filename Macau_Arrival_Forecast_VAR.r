@@ -32,7 +32,10 @@ season_duration <- 12
 
 
 # Converting a data.frame into ts
-time_series = ts(Arrival_stats2[, c(2, 5, 7, 9#:29)],
+time_series = ts(Arrival_stats2[, c(2, 5, 7, 9#:29
+											#,33:36
+											)
+								],
                                     frequency = season_duration,
                                     start = c(2010, 7))
                                 
@@ -94,7 +97,8 @@ time_series = ts(Arrival_stats2[, c(2, 5, 7, 9#:29)],
                                 
                                 x <- autoplot(#confidence:::backtransform(
                                   forecast::forecast(var_model, h = 12)$forecast$Guangdong
-                                  #							, type = c("log")))
+                                  							, type = c("log"))
+                                  							#)
                                   
                                   
                                   x +
@@ -102,4 +106,3 @@ time_series = ts(Arrival_stats2[, c(2, 5, 7, 9#:29)],
                                     theme_bw() +
                                     theme(plot.title = element_text(hjust = 0.5)) +
                                     scale_x_continuous(breaks = seq(from = 2010, to =  2020, by = 1))
-                                  
