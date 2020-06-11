@@ -1,56 +1,42 @@
 .libPaths()
 .libPaths("C:/Program Files/R/R-3.6.1/library")
 
-library(vars)
-library(AER)
-library(sarima)
-library(dynlm)
-library(forecast)
-library(readxl)
-library(stargazer)
-library(scales)
-library(quantmod)
-library(urca)
-library(tseries)
-library(TTR)
-library(dplyr)
-library(bvartools)
-library(rsample)
-library(mda)
-library(confidence)
-library(fUnitRoots)
 
-library(readxl)
-Arrival_stats2 <- read_excel("C:/Arrival stats2.xlsx")
+Packages <- c('readxl', vars','AER','sarima','dynlm','forecast','readxl','stargazer','scales','quantmod','urca','tseries','TTR','dplyr','bvartools','rsample','mda','confidence','ggplot2','fUnitRoots')
+lapply(Packages, library, character.only = TRUE)
+
+
+
+
+Arrival_stats2 <- read_excel("H:/Arrival stats2.xlsx")
 View(Arrival_stats2)
-
-Arrival_stats2$Cov19_Interventions <-
-  as.factor(Arrival_stats2$Cov19_Interventions)
+Arrival_stats2$Cov19_Interventions<-as.factor(Arrival_stats2$Cov19_Interventions)
 
 window <- 12
 season_duration <- 12
 
-
 # Converting a data.frame into ts
-time_series = ts(Arrival_stats2[, c(2, 5, 7, 9#:29
+Macau_Arrivals_time_series = ts(Arrival_stats2[, c(2, 5, 7, 9#:29
 											#,33:36
 											)
-								],
-                                    frequency = season_duration,
-                                    start = c(2010, 7))
-                                
-                                
-                                ## Testing for stationarity
-                                ### tseries - standard test adt.test
-                                
-                                adf.test(time_series)
-                                apply(time_series, 2, adf.test)
-                                
-                                ## Use UnitRoots function
-                                #apply(time_series, 2, adf.test,
-                                #      lags=0, #maximum number of lags used for error term correction
-                                #      type="c", #type of unit root regression
-                                #      title = "ADF Test")
+								],frequency = season_duration, start = c(2010, 7))
+   
+                               
+#test stationarity around a zero-mean with no trend
+adf0<-ur.df(Macau_Arrivals_time_series[,"Guangdong"],type="none",lag=1 #,selectlags = c("Fixed", "AIC", "BIC")
+			)
+
+test<-ur.df(Macau_Arrivals_time_series[,"Guangdong"],type="trend",lag=0 #,selectlags = c("Fixed", "AIC", "BIC")
+			)
+summary(test)			
+#test stationarity around a non-zero mean with no trend
+adf1 <- ur.df(Macau_Arrivals_time_series[,"Guangdong"],type="trend",lag=2 #,selectlags = c("Fixed", "AIC", "BIC")
+			)
+#test stationarity around a trend with an intercept
+adf2<-ur.df(Macau_Arrivals_time_series[,"Guangdong"],type="drift",lag=1 #,selectlags = c("Fixed", "AIC", "BIC")
+			)
+summary(adf1)
+summary(adf2)
                                 
                                 
                                 #var_model <- vars::VAR(time_series)
